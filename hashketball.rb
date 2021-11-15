@@ -1,4 +1,5 @@
 # Write your code below game_hash
+require 'pry'
 def game_hash
   {
     home: {
@@ -127,3 +128,91 @@ def game_hash
 end
 
 # Write code here
+
+def player_stat_finder (player_name, stat_name)
+  symbol = stat_name.to_sym
+  game_hash.each do |team, team_data|
+    team_data.each do |team_stat, players|
+      if team_stat == :players
+        players.each do |player|
+          if player[:player_name] == player_name
+            return player[symbol]
+          end
+        end
+      end
+    end
+  end
+end
+
+
+def num_points_scored (player_name)
+  player_stat_finder(player_name, 'points')
+end
+
+def shoe_size (player_name)
+  player_stat_finder(player_name, 'shoe')
+end
+
+def team_colors (team_name)
+  game_hash.each do |team, team_data|
+    if team_data[:team_name] == team_name
+      return team_data[:colors]
+    end
+  end
+end
+
+def team_names
+  names_arr = []
+  game_hash.each do |team, team_data|
+    names_arr << team_data[:team_name]
+  end
+  names_arr
+end
+
+def player_numbers (team_name)
+  numbers_arr = []
+  game_hash.each do |team, team_data|
+    if team_data[:team_name] == team_name
+      team_data.each do |team_stat, value|
+        if team_stat === :players
+          value.each do |player|
+            numbers_arr << player[:number]
+          end
+        end
+      end
+    end
+  end
+  numbers_arr
+end
+
+def player_stats (player_name)
+  game_hash.each do |team, team_data|
+    team_data.each do |team_stat, players|
+      if team_stat == :players
+        players.each do |player|
+          if player[:player_name] == player_name
+            return player
+          end
+        end
+      end
+    end
+  end
+end
+
+def big_shoe_rebounds 
+  big_shoe = 0
+  big_shoe_name = ''
+  game_hash.each do |team, team_data|
+    team_data.each do |team_stat, value|
+      if team_stat === :players
+        value.each do |player|
+          if player[:shoe] > big_shoe
+            big_shoe = player[:shoe]
+            big_shoe_name = player[:player_name]
+          end
+        end
+      end
+    end
+  end
+  player_stat_finder(big_shoe_name, 'rebounds')
+end
